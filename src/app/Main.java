@@ -1,8 +1,5 @@
 package app;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,8 +23,6 @@ import com.google.gson.stream.JsonToken;
 
 
 public class Main {
-
-//	private static BufferedReader reader;
 	private static Graph graph = new Graph();
 
 	public static void main(String[] args) throws Exception 	{
@@ -72,7 +67,7 @@ public class Main {
     		} 
     		
     		//FEATURE 2. Add tweets to graph and build it on the go
-    		if(tagList != null && tagList.size() > 0) {
+    		if(tagList != null && tagList.size() > 1) {
         		parseTweet(text, created_at, tagList);
     		}
     		

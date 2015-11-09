@@ -33,7 +33,9 @@ public class Util {
 		return utf8tweet;
 	}
 
-
+	/**
+	 * get count of replaced non-ascii symbols 
+	 **/
 	public static int getCount() {
 		// TODO Auto-generated method stub
 		return count;

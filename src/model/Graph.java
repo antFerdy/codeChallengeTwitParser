@@ -13,12 +13,21 @@ public class Graph {
     private HashMap<String, List<String>> vertexMap = new HashMap<String, List<String>>();
     List<Tweet> actualTwits = new ArrayList<Tweet>();
     
+    
+    /**
+     * add new tweet to the graph 
+     **/
     public void add(Tweet newTw) throws FileNotFoundException, UnsupportedEncodingException {
 		//validate new tweet and delete old edges
 		validateTwits(newTw);
 		
-		//Get combination of edges and add new edges
-		List<String> tags = newTw.getTagList();
+		//Get combination of edges and add new edges.
+		//For avoid tags entity removing, we just added clone of tagList
+		ArrayList<String> tagsToClone = (ArrayList<String>) newTw.getTagList();
+		
+		@SuppressWarnings("unchecked")
+		ArrayList<String> tags = (ArrayList<String>) tagsToClone.clone();
+		
 		Iterator<String> it = tags.iterator();
 		while(it.hasNext()) {
 			int j = 0;
@@ -27,7 +36,7 @@ public class Graph {
 			
 			for (int i = j; i < tags.size(); i++) {
 				String secTag = tags.get(i);
-				this.addEdge(firstTag, secTag);
+				addEdge(firstTag, secTag);
 			}
 				
 			it.remove();
@@ -38,6 +47,26 @@ public class Graph {
 		FileManager.saveSecondFeatureOutput(countAvgDegree());
 	}
     
+    /**
+     * delete from the graph 
+     **/
+    public void deleteTweet(Tweet tw) throws FileNotFoundException, UnsupportedEncodingException {
+		//Get combination of edges and delete them
+		List<String> tags = tw.getTagList();
+		Iterator<String> it = tags.iterator();
+		while(it.hasNext()) {
+			int j = 0;
+			String firstTag = it.next();
+			j++;
+			
+			for (int i = j; i < tags.size(); i++) {
+				String secTag = tags.get(i);
+				deleteEdge(firstTag, secTag);
+			}
+				
+			it.remove();
+		}
+	}
 
 
 	public double countAvgDegree() {
@@ -113,7 +142,11 @@ public class Graph {
     	}
     }
     
-	private void validateTwits(Tweet newTw) {
+    /**
+     * Check the time difference between new comming tweet and old tweets
+     * if the difference greater than 60 sec than delete the tweet
+     **/
+	private void validateTwits(Tweet newTw) throws FileNotFoundException, UnsupportedEncodingException {
 		if(actualTwits.size() == 0)
 			return; 
 		Iterator<Tweet> it = actualTwits.iterator();
@@ -124,6 +157,10 @@ public class Graph {
 			long secDiff = mlSecDiff/1000;
 			
 			if(secDiff >= 60) {
+				//delete old edges
+				deleteTweet(twit);
+				
+				//remove from actual tweet list
 				it.remove();
 			}
 		}
