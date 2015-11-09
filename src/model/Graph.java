@@ -1,29 +1,17 @@
 package model;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Graph {
     private HashMap<String, List<String>> vertexMap = new HashMap<String, List<String>>();
     List<Tweet> actualTwits = new ArrayList<Tweet>();
-	private PrintWriter writer;
-    
-    public void close() {
-    	if(writer != null) {
-    		writer.flush();
-    		writer.close();
-    	}
-    }
     
     public void add(Tweet newTw) throws FileNotFoundException, UnsupportedEncodingException {
 		//validate new tweet and delete old edges
@@ -47,8 +35,7 @@ public class Graph {
 		//add to list with actual tweets
 		actualTwits.add(newTw);
 		
-		//save avg degree
-		saveToFile(countAvgDegree());
+		FileManager.saveSecondFeatureOutput(countAvgDegree());
 	}
     
 
@@ -143,17 +130,4 @@ public class Graph {
 		
 	}
 	
-	
-    private void saveToFile(double countAvgDegree) throws FileNotFoundException, UnsupportedEncodingException {
-    	File f = new File("tweet_output\\ft2.txt");
-		if(!f.exists())
-			f.mkdir();
-		
-		if(writer == null)
-			writer = new PrintWriter(f, "UTF-8");
-		
-		DecimalFormat df = new DecimalFormat("####0.00");
-		String degreeStr = df.format(countAvgDegree);
-		writer.println(degreeStr);
-	}
 }

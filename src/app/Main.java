@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import model.FileManager;
 import model.Graph;
 import model.Tweet;
 import model.Util;
@@ -26,23 +27,24 @@ import com.google.gson.stream.JsonToken;
 
 public class Main {
 
-	private static BufferedReader reader;
+//	private static BufferedReader reader;
 	private static Graph graph = new Graph();
 
 	public static void main(String[] args) throws Exception 	{
-		File fileIn = new File("tweet_input\\tweets.txt");
-		FileInputStream in = new FileInputStream(fileIn);
-		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+		//create file variable and inputstream
+		InputStreamReader in = FileManager.createTwitInput();
+		
+		JsonReader reader = new JsonReader(in);
         reader.setLenient(true);
-		extract(reader);	
+		extract(reader);
+		
+		//close old streams
+		FileManager.closeTwitInput();
 	}
 
 
 	private static void extract(JsonReader reader) throws IOException, ParseException {
-		File f = new File("tweet_output\\ft1.txt");
-		if(!f.exists())
-			f.mkdir();
-		PrintWriter writer = new PrintWriter(f, "UTF-8");
+		PrintWriter writer = FileManager.createFirstFeatOut();
         while(true) {
         	if(reader.peek().equals(JsonToken.BEGIN_OBJECT)) {
         		reader.beginObject();
@@ -81,9 +83,8 @@ public class Main {
             
             reader.close();
             writer.println(Util.getCount() + " tweets contained unicode");
-            writer.flush();
-            writer.close();
-            graph.close();
+            FileManager.closeFirstFeatOutput();
+            FileManager.closeSecondFeatOutput();
             return;
         }
 	}
