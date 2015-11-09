@@ -25,16 +25,21 @@ import com.google.gson.stream.JsonToken;
 public class Main {
 	private static Graph graph = new Graph();
 
-	public static void main(String[] args) throws Exception 	{
-		//create file variable and inputstream
-		InputStreamReader in = FileManager.createTwitInput();
-		
-		JsonReader reader = new JsonReader(in);
-        reader.setLenient(true);
-		extract(reader);
-		
-		//close old streams
-		FileManager.closeTwitInput();
+	public static void main(String[] args) 	{
+		try {
+			//create file variable and inputstream
+			InputStreamReader in = FileManager.createTwitInput();
+			
+			JsonReader reader = new JsonReader(in);
+			reader.setLenient(true);
+			extract(reader);
+			
+			//close old streams
+			FileManager.closeTwitInput();
+			
+		} catch (Exception e) {
+			System.err.println("Error with file processing. Please checkout your files" + "/n" + e.toString());
+		}
 	}
 
 
@@ -118,7 +123,7 @@ public class Main {
 
 
 	private static void parseTweet(String utf8tweet, String createdDateStr, List<String> tagList) 
-			throws ParseException, FileNotFoundException, UnsupportedEncodingException {		
+			throws ParseException, IOException {		
 		//parse date
 		DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);
 		Date date = format.parse(createdDateStr);

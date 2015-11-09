@@ -39,12 +39,13 @@ public class FileManager {
 
 	/**
 	 * create output for first feature logic 
+	 * @throws IOException 
 	 **/
-	public static PrintWriter createFirstFeatOut() throws FileNotFoundException, UnsupportedEncodingException {
+	public static PrintWriter createFirstFeatOut() throws IOException {
 		String sep = File.separator;
 		File f = new File("tweet_output" + sep + "ft1.txt");
 		if(!f.exists())
-			f.mkdir();
+			f.createNewFile();
 		firstFeatWriter = new PrintWriter(f, "UTF-8");
 		return firstFeatWriter;
 	}
@@ -61,13 +62,12 @@ public class FileManager {
 	
 	/**
 	 * Save second feature result in file
-	 * @throws UnsupportedEncodingException 
-	 * @throws FileNotFoundException 
+	 * @throws IOException 
 	 **/
-	public static void saveSecondFeatureOutput(double countAvgDegree) throws FileNotFoundException, UnsupportedEncodingException {
+	public static void saveSecondFeatureOutput(double countAvgDegree) throws IOException {
     	File f = new File("tweet_output" + sep + "ft2.txt");
 		if(!f.exists())
-			f.mkdir();
+			f.createNewFile();
 		
 		if(secondFearWriter == null)
 			secondFearWriter = new PrintWriter(f, "UTF-8");

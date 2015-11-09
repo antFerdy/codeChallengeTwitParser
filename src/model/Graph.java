@@ -1,6 +1,7 @@
 package model;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,8 +17,9 @@ public class Graph {
     
     /**
      * add new tweet to the graph 
+     * @throws IOException 
      **/
-    public void add(Tweet newTw) throws FileNotFoundException, UnsupportedEncodingException {
+    public void add(Tweet newTw) throws IOException {
 		//validate new tweet and delete old edges
 		validateTwits(newTw);
 		
